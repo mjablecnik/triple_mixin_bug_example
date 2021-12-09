@@ -83,22 +83,34 @@ class MyHomePage extends StatelessWidget {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: counter.increment,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+      floatingActionButton: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          FloatingActionButton(
+            onPressed: counter.back,
+            tooltip: 'Back',
+            child: const Text("Back"),
+          ),
+          const SizedBox(width: 16),
+          FloatingActionButton(
+            onPressed: counter.increment,
+            tooltip: 'Increment',
+            child: const Icon(Icons.add),
+          ),
+        ],
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
 
-class Counter extends StreamStore<Exception, int> {
+class Counter extends StreamStore<Exception, int> with MementoMixin {
   Counter() : super(0);
+
+  back() => undo();
 
   Future<void> increment() async {
     setLoading(true);
-
-    await Future.delayed(const Duration(seconds: 1));
 
     int value = state + 1;
     if (value <= 10) {
